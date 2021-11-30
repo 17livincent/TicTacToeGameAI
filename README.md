@@ -12,6 +12,7 @@ This personal project is a Tic Tac Toe Game between 2 human or AI (WORK IN PROGR
     - Determines the game result: win/loss/draw.
 - ```player.cpp``` and ```player.h```
     - Specifies a player that can view the game grid and make moves.
+    - Inherited to create different types of players.
 - ```board.cpp``` and ```board.h```
     - Implements the Tic Tac Toe board plus get/set functions.
 - ```util.h```

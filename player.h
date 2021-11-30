@@ -9,7 +9,6 @@
 #define PLAYER
 
 #include "game.h"
-#include "util.h"
 
 class Game; // forware declaration
 

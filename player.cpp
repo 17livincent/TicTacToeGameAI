@@ -6,6 +6,8 @@
 #include <iostream>
 
 #include "player.h"
+#include "util.h"
+
 
 Player::Player(int code, char mark) {
     this->code = code;
@@ -37,6 +39,7 @@ moveRCPair Player::chooseMove(Game game) {
     } while(game.validatePlayerInput(input));
 
     moveRCPair move = processPlayerInput(input);
+    std::cout << "\tPlayer " << this->mark << " marks " << move.row << "," << move.column << std::endl; 
 
     return move;
 }
