@@ -9,11 +9,10 @@
 #include "play.h"
 #include "game.h"
 
-int Play::play(Player playerX, Player playerO) {
+int Play::play(Player& playerX, Player& playerO) {
     int result;
-
     Game game;
-
+    
     // game status
     int xWon = 0;
     int oWon = 0;
@@ -21,7 +20,7 @@ int Play::play(Player playerX, Player playerO) {
     std::string input;
     Player* player;
 
-    std::cout << "Welcome to a game of Tic-Tac-Toe!" << std::endl;    
+    std::cout << "Welcome to a game of Tic-Tac-Toe!" << std::endl;
 
     while(xWon == 0 && oWon == 0 && draw == 0) {
         // Get current player
@@ -35,7 +34,7 @@ int Play::play(Player playerX, Player playerO) {
         std::cout << "Player " << player->mark << " goes: " << std::endl;
         
         // Get valid player input
-        moveRCPair move = player->chooseMove(game);
+        moveRCPair move = player->chooseMove(&game);
 
         // Make the move
         game.playerMarks(player->mark, move.row, move.column);
@@ -66,9 +65,14 @@ int main(int argc, char** argv) {
     Play playGame;
 
     // Run a game between two human players.
-    Player playerX = Player(PLAYER_X_CODE, PLAYER_X_MARK);
-    Player playerO = Player(PLAYER_O_CODE, PLAYER_O_MARK);
-    int result = playGame.play(playerX, playerO);
+    //HumanPlayer playerX = HumanPlayer(PLAYER_X_CODE, PLAYER_X_MARK);
+    //Player playerO = Player(PLAYER_O_CODE, PLAYER_O_MARK);
+    //int result = playGame.play(playerX, playerO);
+
+    // Run a game between a human and an AI player.
+    HumanPlayer playerX = HumanPlayer(PLAYER_X_CODE, PLAYER_X_MARK);
+    AIPlayerMinimax ai = AIPlayerMinimax(PLAYER_O_CODE, PLAYER_O_MARK, 9, &playerX);
+    playGame.play(playerX, ai);
 
     return 0;
 }

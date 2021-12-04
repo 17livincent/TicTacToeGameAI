@@ -10,14 +10,16 @@
 #include <utility>
 
 #include "player.h"
+#include "playerhuman.h"
+#include "playerminimax.h"
 
 class Play {
     public:
         /**
-         *  Play a game between two people.
+         *  Play a game between any two kinds of players.
          *  Return PLAYER_X_WON, PLAYER_O_WON, or DRAW.
          */
-        int play(Player playerX, Player playerO);
+        int play(Player& playerX, Player& playerO);
 };
 
 #endif  // PLAY

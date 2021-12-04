@@ -11,8 +11,14 @@ This personal project is a Tic Tac Toe Game between 2 human or AI (WORK IN PROGR
     - Validates player inputs.
     - Determines the game result: win/loss/draw.
 - ```player.cpp``` and ```player.h```
-    - Specifies a player that can view the game grid and make moves.
-    - Inherited to create different types of players.
+    - Base class of all player types.
+    - Players can view the board, see possible actions, and pick a move.
+- ```playerhuman.cpp``` and ```playerhuman.h```
+    - A player that uses command line input to pick moves.
+- ```playerminimax.cpp``` and ```playerminimax.h```
+    - An AI player that uses the Minimax algorithm to pick an optimal move.
+    - Given a search depth limit to create the game tree.
+    - Uses a simple evaluation function as the heuristic.
 - ```board.cpp``` and ```board.h```
     - Implements the Tic Tac Toe board plus get/set functions.
 - ```util.h```

@@ -1,12 +1,15 @@
 /**
  *  @file player.h
  *  @author Vincent Li
- *  Represents the player in Tic Tac Toe.
+ *  Parent class of the player in Tic Tac Toe.
  */
 
 #pragma once
 #ifndef PLAYER
 #define PLAYER
+
+#include <iostream>
+#include <list>
 
 #include "game.h"
 
@@ -21,6 +24,11 @@ class Player {
         Player(int code, char mark);
 
         /**
+         *  Get a list of valid actions for the given player.
+         */
+        std::list<moveRCPair> getValidActions(char gameState[3][3]);
+
+        /**
          *  Create and return a pair based on the row,column input.
          *  Player input must be validated before this using Game::validatePlayerInput().
          */
@@ -30,7 +38,12 @@ class Player {
          *  Return a moveRCPair after looking at the game.
          *  Wait for the human player to enter his/her move.  The AI player will calculate the best move and the return it.
          */
-        virtual moveRCPair chooseMove(Game game);
+        virtual moveRCPair chooseMove(Game* game) {
+            // dummy body
+            std::cout << "Dummy function called" << std::endl;
+            moveRCPair dummy;
+            return dummy;
+        };
 };
 
 #endif  // PLAYER

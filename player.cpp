@@ -14,6 +14,23 @@ Player::Player(int code, char mark) {
     this->mark = mark;
 }
 
+std::list<moveRCPair> Player::getValidActions(char gameState[3][3]) {
+    std::list<moveRCPair> actions;
+
+    for(int i = 0; i < 9; i++) {
+        int row = int(i / 3);
+        int col = i % 3;
+        if(gameState[row][col] == CLEAR) {
+            moveRCPair move;
+            move.row = row;
+            move.column = col;
+            actions.push_back(move);
+        }
+    }
+
+    return actions;
+}
+
 moveRCPair Player::processPlayerInput(std::string input) {
     moveRCPair pair;
     std::string inputCopy = input;
@@ -29,17 +46,4 @@ moveRCPair Player::processPlayerInput(std::string input) {
     pair.column = cVal;
 
     return pair;
-}
-
-moveRCPair Player::chooseMove(Game game) {
-    std::string input;
-    do {
-        std::cout << "\tEnter a coordinate of the form <row>,<col>: ";
-        std::cin >> input;
-    } while(game.validatePlayerInput(input));
-
-    moveRCPair move = processPlayerInput(input);
-    std::cout << "\tPlayer " << this->mark << " marks " << move.row << "," << move.column << std::endl; 
-
-    return move;
 }
