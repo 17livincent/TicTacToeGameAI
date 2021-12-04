@@ -59,11 +59,10 @@ bool Game::playerMarks(const char playerMark, int row, int col) {
 
     if(status == true) {
         // add to history
-        move m;
-        m.playerMark = playerMark;
-        m.row = row;
-        m.col = col;
-        history.push_back(m);
+        moveRCPair move;
+        move.row = row;
+        move.column = col;
+        history.push_back(move);
 
         // update current player
         currentPlayer = (currentPlayer + 1) % 2;

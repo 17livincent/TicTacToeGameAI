@@ -14,30 +14,13 @@
 
 #include "util.h"
 #include "board.h"
-#include "player.h"
-
-// Struct to record move history
-struct move {
-    char playerMark;
-    // box marked
-    int row;
-    int col;
-};
 
 class Game {
     public:
         GameBoard board;
-        /**
-         *  Game state.
-         *  0: still playing
-         *  1: playerX won
-         *  2: playerO won
-         *  3: draw
-         */
-        int gameState = 0;
         int currentPlayer = -1;  // code for current player.  Initial value determines the player that goes first.
         int turns = 0;  // number of turns taken / boxes filled
-        std::vector<move> history;  // vector of moves
+        std::vector<moveRCPair> history;  // vector of moves
         
         /**
          *  Constructor
