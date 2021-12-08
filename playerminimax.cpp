@@ -57,7 +57,7 @@ std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node,
 
 int AIPlayerMinimax::evalFunction(MinimaxTreeNode* node) {
     /**
-     * Heuristic = 5X3(s) + 3X2(s) + X1(s) - (7O3(s) + 3O2(s) + O1(s)) 
+     * Heuristic = 3X3(s) + 3X2(s) + X1(s) - (3O3(s) + 3O2(s) + O1(s)) 
      * Xn is the number of rows, columns, or diagonals with just n X's.
      * On is the number of rows, columns, or diagonals with just n O's.
      * In this case, X is this player's mark.
@@ -146,7 +146,7 @@ int AIPlayerMinimax::evalFunction(MinimaxTreeNode* node) {
         else if(ownCount == 3) own3++;
     }
 
-    int h = 5 * own3 + 3 * own2 + own1 - (7 * opp3 + 3 * opp2 + opp1);
+    int h = 3 * own3 + 3 * own2 + own1 - (3 * opp3 + 3 * opp2 + opp1);
 
     return h;
 }
@@ -161,17 +161,18 @@ MinimaxTreeNode* AIPlayerMinimax::createGameTree(moveRCPair action, char gameSta
     for(int i = 0; i < 9; i++) {
         node->gameState[int(i / 9)][i % 9] = gameState[int(i / 9)][i % 9];
     }
-    if(layer == 0) {    // final layer, so stop
+
+    // If layer is even or 0, then the current player is this, next player is the opponent
+    // If the layer is odd, then the current palyer is opponent, next player is this player
+    Player* currentPlayer = (layer % 2 == 0) ? this : this->opponent;
+    // Create nodes for each action of the current player
+    // If validActions is empty, then no successors are created
+    std::list<moveRCPair> validActions = currentPlayer->getValidActions(gameState);
+
+    if(layer == 0 || validActions.size() == 0) {    // final layer or no more actions, so stop
         return node;
     }
     else {  // Generate successors
-        // If layer is even or 0, then the current player is this, next player is the opponent
-        // If the layer is odd, then the current palyer is opponent, next player is this player
-        Player* currentPlayer = (layer % 2 == 0) ? this : this->opponent;
-        
-        // Create nodes for each action of the current player
-        // If validActions is empty, then no successors are created
-        std::list<moveRCPair> validActions = currentPlayer->getValidActions(gameState);
         for(moveRCPair move : validActions) {
             // Copy game state
             char nextGameState[3][3];

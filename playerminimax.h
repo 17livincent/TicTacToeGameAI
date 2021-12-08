@@ -34,7 +34,7 @@ class AIPlayerMinimax: public Player {
 
         // Constructor
         AIPlayerMinimax(int code, char mark, int depthLimit, Player* opponent): Player(code, mark) {
-            this->depthLimit = (depthLimit == 0) ? 9 : depthLimit;
+            this->depthLimit = (depthLimit <= 0) ? 9 : depthLimit;
             this->opponent = opponent;
 
             // Introduction
