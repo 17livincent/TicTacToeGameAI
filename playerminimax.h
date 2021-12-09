@@ -46,9 +46,10 @@ class AIPlayerMinimax: public Player {
 
         /**
          * Perform minimax search on the game tree of the given root and depth.
+         * Uses alpha-beta pruning.
          * Returns a pair containing the optimal move and its heuristic value.
          */
-        std::pair<moveRCPair, int> minimaxSearch(MinimaxTreeNode* node, int depth, bool maxPlayer, moveRCPair action);
+        std::pair<moveRCPair, int> minimaxSearch(MinimaxTreeNode* node, int depth, int alpha, int beta, bool maxPlayer, moveRCPair action);
 
         /**
          * Return a heuristic based on the node's game state.

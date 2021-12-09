@@ -13,7 +13,7 @@ moveRCPair AIPlayerMinimax::chooseMove(Game* game) {
     MinimaxTreeNode* gameTree = createGameTree(initialAction, game->board.grid, this->depthLimit * 2);
     std::cout << "\tMinimax AI created game tree of size " << treeSize << std::endl;
     // Perform minimax search and get the best move
-    std::pair<moveRCPair, int> minimax = minimaxSearch(gameTree, this->depthLimit * 2, true, initialAction);
+    std::pair<moveRCPair, int> minimax = minimaxSearch(gameTree, this->depthLimit * 2, -1000, 1000, true, initialAction);
     moveRCPair optAction = minimax.first;
     std::cout << "\tFound optimal move: " << optAction.row << ", " << optAction.column << " of value " << minimax.second << std::endl;
     // Delete the game tree
@@ -22,7 +22,7 @@ moveRCPair AIPlayerMinimax::chooseMove(Game* game) {
     return optAction;
 }
 
-std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node, int depth, bool maxPlayer, moveRCPair action) {
+std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node, int depth, int alpha, int beta, bool maxPlayer, moveRCPair action) {
     if(depth == 0 || node->successors.size() == 0) {
         return std::make_pair(action, evalFunction(node));
     }
@@ -32,11 +32,15 @@ std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node,
         int maxValue = -1000;  // negative infinity
         //std::cout << node->successors.size() << std::endl;
         for(MinimaxTreeNode* successor : node->successors) {
-            std::pair<moveRCPair, int> temp = minimaxSearch(successor, depth - 1, false, action);
+            std::pair<moveRCPair, int> temp = minimaxSearch(successor, depth - 1, alpha, beta, false, action);
             if(temp.second > maxValue) {
                 maxValue = temp.second;
                 localAction = successor->action;
             }
+
+            // Alpha-beta pruning
+            if(maxValue >= beta) break;
+            alpha = (alpha > maxValue) ? alpha : maxValue;
         }
         return std::make_pair(localAction, maxValue);
     }
@@ -45,11 +49,15 @@ std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node,
         int minValue = 1000;  // infinity
         //std::cout << node->successors.size() << std::endl;
         for(MinimaxTreeNode* successor : node->successors) {
-            std::pair<moveRCPair, int> temp = minimaxSearch(successor, depth - 1, true, action);
+            std::pair<moveRCPair, int> temp = minimaxSearch(successor, depth - 1, alpha, beta, true, action);
             if(temp.second < minValue) {
                 minValue = temp.second;
                 localAction = successor->action;
             }
+
+            // Alpha-beta pruning
+            if(minValue <= alpha) break;
+            beta = (minValue < beta) ? minValue : beta;
         }
         return std::make_pair(localAction, minValue);
     }
