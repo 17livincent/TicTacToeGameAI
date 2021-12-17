@@ -20,7 +20,7 @@ const std::string PLAYER_X_NAME = "Player X";
 const char PLAYER_X_MARK = 'X';
 
 // Details of player O
-const int PLAYER_O_CODE = 0;
+const int PLAYER_O_CODE = -1;
 const std::string PLAYER_O_NAME = "Player O";
 const char PLAYER_O_MARK = 'O';
 
@@ -33,6 +33,8 @@ const int COLS = 3;
 
 const int PLAYER_O_WON = PLAYER_O_CODE;
 const int PLAYER_X_WON = PLAYER_X_CODE;
-const int DRAW = -1;
+const int WIN = 1;
+const int LOSS = -1;
+const int DRAW = 0;
 
 #endif  // UTIL

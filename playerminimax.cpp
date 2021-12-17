@@ -6,6 +6,8 @@
 #include "playerminimax.h"
 #include <iostream>
 
+#define copyGameState(gameState, nextGameState) for(int i = 0; i < 9; i++) nextGameState[int(i / 9)][i % 9] = gameState[int(i / 9)][i % 9];
+
 moveRCPair AIPlayerMinimax::chooseMove(Game* game) {
     this->treeSize = 0;
     // Create game tree
@@ -166,9 +168,7 @@ MinimaxTreeNode* AIPlayerMinimax::createGameTree(moveRCPair action, char gameSta
     node->player = (layer % 2 == 0) ? MAXPLAYER : MINPLAYER;
     node->action = action;
     // Set node's game state to the given one.
-    for(int i = 0; i < 9; i++) {
-        node->gameState[int(i / 9)][i % 9] = gameState[int(i / 9)][i % 9];
-    }
+    copyGameState(gameState, node->gameState);
 
     // If layer is even or 0, then the current player is this, next player is the opponent
     // If the layer is odd, then the current palyer is opponent, next player is this player
@@ -184,9 +184,7 @@ MinimaxTreeNode* AIPlayerMinimax::createGameTree(moveRCPair action, char gameSta
         for(moveRCPair move : validActions) {
             // Copy game state
             char nextGameState[3][3];
-            for(int i = 0; i < 9; i++) {
-                nextGameState[int(i / 9)][i % 9] = gameState[int(i / 9)][i % 9];
-            }
+            copyGameState(gameState, nextGameState);
             // Create new game state
             nextGameState[move.row][move.column] = currentPlayer->mark;
             MinimaxTreeNode* successor = createGameTree(move, nextGameState, layer - 1);
@@ -202,6 +200,7 @@ void AIPlayerMinimax::deleteTree(MinimaxTreeNode* root) {
         for(MinimaxTreeNode* successor : root->successors) {
             deleteTree(successor);
         }
+        root->successors.clear();
         delete root;
         root = NULL;
     }
