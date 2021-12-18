@@ -10,7 +10,7 @@
 Game::Game() {
     // Initialize currentPlayer
     srand(time(NULL));
-    currentPlayer = (rand() % 10) % 2;
+    currentPlayer = ((rand() % 10) % 2 == 0) ? -1 : 1;  // Randomly pick -1 or 1
 }
 
 bool Game::playerWins(const char playerMark) {
@@ -65,7 +65,7 @@ bool Game::playerMarks(const char playerMark, int row, int col) {
         history.push_back(move);
 
         // update current player
-        currentPlayer = (currentPlayer + 1) % 2;
+        currentPlayer = -1 * currentPlayer;
 
         // update turns
         turns++;
