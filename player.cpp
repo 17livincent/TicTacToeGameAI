@@ -14,7 +14,7 @@ Player::Player(int code, char mark) {
     this->mark = mark;
 }
 
-std::list<moveRCPair> Player::getValidActions(char gameState[3][3]) {
+std::list<moveRCPair> getValidActions(char gameState[3][3]) {
     std::list<moveRCPair> actions;
 
     for(int i = 0; i < 9; i++) {

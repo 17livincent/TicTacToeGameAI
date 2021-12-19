@@ -15,6 +15,13 @@
 
 class Game; // forware declaration
 
+#define copyGameState(gameState, nextGameState) for(int i = 0; i < 9; i++) nextGameState[int(i / 3)][i % 3] = gameState[int(i / 3)][i % 3];
+
+/**
+ *  Get a list of valid actions.
+ */
+std::list<moveRCPair> getValidActions(char gameState[3][3]);
+
 class Player {
     public:
         char mark;  // player mark (X or O)
@@ -22,11 +29,6 @@ class Player {
 
         // Constructor
         Player(int code, char mark);
-
-        /**
-         *  Get a list of valid actions for the given player.
-         */
-        std::list<moveRCPair> getValidActions(char gameState[3][3]);
 
         /**
          *  Create and return a pair based on the row,column input.

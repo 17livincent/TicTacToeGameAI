@@ -6,8 +6,6 @@
 #include "playerminimax.h"
 #include <iostream>
 
-#define copyGameState(gameState, nextGameState) for(int i = 0; i < 9; i++) nextGameState[int(i / 9)][i % 9] = gameState[int(i / 9)][i % 9];
-
 moveRCPair AIPlayerMinimax::chooseMove(Game* game) {
     this->treeSize = 0;
     // Create game tree
@@ -175,7 +173,7 @@ MinimaxTreeNode* AIPlayerMinimax::createGameTree(moveRCPair action, char gameSta
     Player* currentPlayer = (layer % 2 == 0) ? this : this->opponent;
     // Create nodes for each action of the current player
     // If validActions is empty, then no successors are created
-    std::list<moveRCPair> validActions = currentPlayer->getValidActions(gameState);
+    std::list<moveRCPair> validActions = getValidActions(gameState);
 
     if(layer == 0 || validActions.size() == 0) {    // final layer or no more actions, so stop
         return node;
