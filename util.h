@@ -27,6 +27,9 @@ const char PLAYER_O_MARK = 'O';
 // Placeholder for an empty box in the board
 const char CLEAR = '_';
 
+// Blank board
+#define BLANK_BOARD {{CLEAR, CLEAR, CLEAR}, {CLEAR, CLEAR, CLEAR}, {CLEAR, CLEAR, CLEAR}}
+
 const int ROWS = 3;
 
 const int COLS = 3;

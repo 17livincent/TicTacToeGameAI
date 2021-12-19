@@ -15,7 +15,7 @@
 class GameBoard {
     public:
         // 2D array representing the board.
-        char grid[3][3] = {{CLEAR, CLEAR, CLEAR}, {CLEAR, CLEAR, CLEAR}, {CLEAR, CLEAR, CLEAR}};
+        char grid[3][3] = BLANK_BOARD;
 
         // Returns a string representation of the board.
         std::string visBoard();

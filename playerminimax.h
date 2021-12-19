@@ -18,7 +18,7 @@
 // A node in a minimax search tree.
 struct MinimaxTreeNode {
     int player = -1;    // -1 by default.  Given value MAXPLAYER or MINPLAYER
-    char gameState[3][3] = {CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR, CLEAR};  // A 3x3 array like the game board.
+    char gameState[3][3] = BLANK_BOARD;  // A 3x3 array like the game board.
     moveRCPair action;  // The action that lead to the game state in this node.
     std::list<MinimaxTreeNode*> successors;   // A list of pointers to child nodes.
 };
