@@ -12,6 +12,7 @@
 #include "player.h"
 #include "playerhuman.h"
 #include "playerminimax.h"
+#include "playermontecarlo.h"
 
 class Play {
     public:

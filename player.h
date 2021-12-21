@@ -15,7 +15,7 @@
 
 class Game; // forware declaration
 
-#define copyGameState(gameState, nextGameState) for(int i = 0; i < 9; i++) nextGameState[int(i / 3)][i % 3] = gameState[int(i / 3)][i % 3];
+#define copyGameState(original, copyTo) for(int i = 0; i < 9; i++) copyTo[int(i / 3)][i % 3] = original[int(i / 3)][i % 3];
 
 /**
  *  Get a list of valid actions.
