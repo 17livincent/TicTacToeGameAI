@@ -39,9 +39,9 @@ int Play::play(Player& playerX, Player& playerO) {
         game.playerMarks(player->mark, move.row, move.column);
 
         // Check game status
-        xWon = game.playerWins(playerX.mark);
-        oWon = game.playerWins(playerO.mark);
-        draw = game.isDraw();
+        xWon = playerWins(playerX.mark, game.board.grid);
+        oWon = playerWins(playerO.mark, game.board.grid);
+        draw = isDraw(game.board.grid);
     }
 
     if(xWon) {
@@ -74,39 +74,16 @@ int main(int argc, char** argv) {
     //playGame.play(playerX, ai);
 
     // Run a game between two minimax AI players.
-    AIPlayerMinimax ai1 = AIPlayerMinimax(PLAYER_X_CODE, PLAYER_X_MARK, 9, NULL);
-    AIPlayerMinimax ai2 = AIPlayerMinimax(PLAYER_O_CODE, PLAYER_O_MARK, 3, NULL);
-    ai1.opponent = &ai2;
-    ai2.opponent = &ai1;
-    playGame.play(ai1, ai2);
-    /*
-    // Loops to see the weird behaviors of the evaluation function due to search depths, in games between two minimax AIs.
-    for(int ai1Depth = 1; ai1Depth <= 9; ai1Depth++) {
-        for(int ai2Depth = 1; ai2Depth <= ai1Depth; ai2Depth++) {
-            int wins = 0;
-            int draws = 0;
-            int losses = 0;
-            int result;
-            std::cout << "X depth: " << ai1Depth << ", O depth: " << ai2Depth << std::endl;
-            for(int i = 0; i < 10; i++) {
-                AIPlayerMinimax ai1 = AIPlayerMinimax(PLAYER_X_CODE, PLAYER_X_MARK, ai1Depth, NULL);
-                AIPlayerMinimax ai2 = AIPlayerMinimax(PLAYER_O_CODE, PLAYER_O_MARK, ai2Depth, NULL);
-                ai1.opponent = &ai2;
-                ai2.opponent = &ai1;
-                result = playGame.play(ai1, ai2);
+    //AIPlayerMinimax ai1 = AIPlayerMinimax(PLAYER_X_CODE, PLAYER_X_MARK, 9, NULL);
+    //AIPlayerMinimax ai2 = AIPlayerMinimax(PLAYER_O_CODE, PLAYER_O_MARK, 3, NULL);
+    //ai1.opponent = &ai2;
+    //ai2.opponent = &ai1;
+    //playGame.play(ai1, ai2);
 
-                if(result == 1) wins++;
-                else if(result == 0) losses++;
-                else draws++;
-            }
-            
-            std::cout << "Wins: " << wins << std::endl;
-            std::cout << "Draws: " << draws << std::endl;
-            std::cout << "Losses: " << losses << std::endl;
+    //
+    HumanPlayer player = HumanPlayer(PLAYER_X_CODE, PLAYER_X_MARK);
+    AIPlayerMonteCarlo ai = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 100, &player);
+    playGame.play(player, ai);
 
-        }
-    }
-    */
-   
     return 0;
 }

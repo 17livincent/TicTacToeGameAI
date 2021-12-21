@@ -10,42 +10,42 @@
 Game::Game() {
     // Initialize currentPlayer
     srand(time(NULL));
-    currentPlayer = ((rand() % 10) % 2 == 0) ? -1 : 1;  // Randomly pick -1 or 1
+    currentPlayer = ((rand() % 10) % 2 == 0) ? PLAYER_O_CODE : PLAYER_X_CODE;  // Randomly pick -1 or 1
 }
 
-bool Game::playerWins(const char playerMark) {
+bool playerWins(const char playerMark, char grid[3][3]) {
     bool won = false;
 
     // check horizontal
-    if((playerMark == board.grid[0][0] && playerMark == board.grid[0][1] && playerMark == board.grid[0][2])
-        || (playerMark == board.grid[1][0] && playerMark == board.grid[1][1] && playerMark == board.grid[1][2])
-        || (playerMark == board.grid[2][0] && playerMark == board.grid[2][1] && playerMark == board.grid[2][2])) {
+    if((playerMark == grid[0][0] && playerMark == grid[0][1] && playerMark == grid[0][2])
+        || (playerMark == grid[1][0] && playerMark == grid[1][1] && playerMark == grid[1][2])
+        || (playerMark == grid[2][0] && playerMark == grid[2][1] && playerMark == grid[2][2])) {
         won = true;
     }
     // check vertical
-    else if((playerMark == board.grid[0][0] && playerMark == board.grid[1][0] && playerMark == board.grid[2][0])
-        || (playerMark == board.grid[0][1] && playerMark == board.grid[1][1] && playerMark == board.grid[2][1])
-        || (playerMark == board.grid[0][2] && playerMark == board.grid[1][2] && playerMark == board.grid[2][2])) {
+    else if((playerMark == grid[0][0] && playerMark == grid[1][0] && playerMark == grid[2][0])
+        || (playerMark == grid[0][1] && playerMark == grid[1][1] && playerMark == grid[2][1])
+        || (playerMark == grid[0][2] && playerMark == grid[1][2] && playerMark == grid[2][2])) {
         won = true;    
         
     }
     // check diagnol
-    else if((playerMark == board.grid[0][0] && playerMark == board.grid[1][1] && playerMark == board.grid[2][2])
-        || (playerMark == board.grid[2][0] && playerMark == board.grid[1][1] && playerMark == board.grid[0][2])) {
+    else if((playerMark == grid[0][0] && playerMark == grid[1][1] && playerMark == grid[2][2])
+        || (playerMark == grid[2][0] && playerMark == grid[1][1] && playerMark == grid[0][2])) {
         won = true;
     }
 
     return won;
 }
 
-bool Game::isDraw() {
+bool isDraw(char grid[3][3]) {
     bool draw = false;
 
     int markCount = 0;
 
     for(int r = 0; r < ROWS; r++) {
         for(int c = 0; c < COLS; c++) {
-            if(board.grid[r][c] != CLEAR) markCount++;
+            if(grid[r][c] != CLEAR) markCount++;
         }
     }
 

@@ -15,6 +15,19 @@
 #include "util.h"
 #include "board.h"
 
+/**
+ *  Scan the board to determine if Player X/O won.
+ *  Return true if so, false if not.
+ */
+bool playerWins(const char playerMark, char grid[3][3]);
+
+/**
+ *  Scan the board to determine if there is a draw.
+ *  Should call this after calling playerWins() for both players.
+ *  Return true if so, false if not.
+ */
+bool isDraw(char grid[3][3]);
+
 class Game {
     public:
         GameBoard board;
@@ -27,19 +40,6 @@ class Game {
          * Initializes currentPlayer randomly to 0 or 1.
          */
         Game();
-
-        /**
-         *  Scan the board to determine if Player X/O won.
-         *  Return true if so, false if not.
-         */
-        bool playerWins(const char playerMark);
-
-        /**
-         *  Scan the board to determine if there is a draw.
-         *  Should call this after calling playerWins() for both players.
-         *  Return true if so, false if not.
-         */
-        bool isDraw();
 
         /**
          *  Player makes a move with its given mark and grid row and col.
