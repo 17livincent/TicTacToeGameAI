@@ -40,10 +40,9 @@ float ucb(MonteCarloTreeNode* node) {
     float value = 1;
 
     // Prevent divide by zero
-    float ownNumOfVisits = (node->numOfVisits == 0.0) ? 0.001 : node->numOfVisits;
-    float predNumOfVisits = (node->predecessor->numOfVisits <= 0.0) ? 1 : node->predecessor->numOfVisits;
-
-    value = (node->numOfWins + node->numOfDraws) / (ownNumOfVisits) + std::sqrt(2) * std::sqrt(std::log(predNumOfVisits) / ownNumOfVisits);
+    float ownNumOfVisits = (node->numOfVisits == 0) ? 0.0000001 : node->numOfVisits;
+    float predNumOfVisits = (node->predecessor->numOfVisits == 0) ? 1 : node->predecessor->numOfVisits;
+    value = ((node->numOfWins + node->numOfDraws) / (ownNumOfVisits)) + (std::sqrt(2) * std::sqrt(std::log(predNumOfVisits) / ownNumOfVisits));
 
     return value;
 }
@@ -78,7 +77,9 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
     moveRCPair move;
 
     // Create root node from given game
-    bool currentPlayer = (game->currentPlayer == PLAYER_X_CODE && this->code == PLAYER_X_CODE) ? SELF : OPPONENT;
+    // The player of this node is the one that just played
+    bool currentPlayer = ((game->currentPlayer == PLAYER_X_CODE && this->code == PLAYER_X_CODE) 
+                            || (game->currentPlayer == PLAYER_O_CODE && this->code == PLAYER_O_CODE)) ? OPPONENT : SELF;
     moveRCPair placeholder = std::make_pair(-1, -1);
     MonteCarloTreeNode* root = createNode(currentPlayer, game->board.grid, placeholder, NULL);
 
@@ -103,7 +104,9 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
     float max = -1;
     MonteCarloTreeNode* mostPromising;
     for(MonteCarloTreeNode* successor : root->successors) {
-        float value = (successor->numOfWins + successor->numOfDraws) / successor->numOfVisits;
+        // Prevent divide by zero
+        float numOfVisits = (successor->numOfVisits == 0) ? 0.0000001 : successor->numOfVisits;
+        float value = (successor->numOfWins + successor->numOfDraws);// / numOfVisits;
         if(value >= max) {
             max = value;
             mostPromising = successor;
@@ -153,25 +156,6 @@ MonteCarloTreeNode* AIPlayerMonteCarlo::expansion(MonteCarloTreeNode* leaf) {
     //std::cout << newNode << std::endl;
     // If this is a terminal node, do nothing.
     if(!leaf->untriedActions.empty()) { // Otherwise,
-	/*
-        // Randomly pick an untried action.
-        srand(time(NULL));
-        std::list<moveRCPair>::iterator it = leaf->untriedActions.begin();
-        int randomIndex = rand() % leaf->untriedActions.size();
-        for(int i = 0; i < randomIndex; i++) it++;
-        moveRCPair nextAction = *it;
-        leaf->untriedActions.erase(it);
-
-        // Create a successor with the action at the iterator
-        bool nextPlayer = (leaf->player == SELF) ? OPPONENT : SELF;
-        char nextGameState[3][3];
-        copyGameState(leaf->gameState, nextGameState);
-        nextGameState[nextAction.row][nextAction.column] = (nextPlayer == SELF) ? this->mark : this->opponent->mark;
-        newNode = createNode(nextPlayer, nextGameState, nextAction, leaf);
-
-        // Add successor
-        leaf->successors.push_back(newNode);
-	*/
 	// Expand all untried actions
 	bool nextPlayer = (leaf->player == SELF) ? OPPONENT : SELF;
 	for(moveRCPair untriedAction : leaf->untriedActions) {

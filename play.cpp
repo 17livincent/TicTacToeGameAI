@@ -80,10 +80,12 @@ int main(int argc, char** argv) {
     //ai2.opponent = &ai1;
     //playGame.play(ai1, ai2);
 
-    //
-    HumanPlayer player = HumanPlayer(PLAYER_X_CODE, PLAYER_X_MARK);
-    AIPlayerMonteCarlo ai = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 100, &player);
-    playGame.play(player, ai);
+    // Run a game between two MCTS players.
+    AIPlayerMonteCarlo ai1 = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 80, NULL);
+    AIPlayerMonteCarlo ai2 = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 2, NULL);
+    ai1.opponent = &ai2;
+    ai2.opponent = &ai1;
+    playGame.play(ai1, ai2);
 
     return 0;
 }
