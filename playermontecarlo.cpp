@@ -65,7 +65,7 @@ void deleteTree(MonteCarloTreeNode* root) {
         for(MonteCarloTreeNode* successor : root->successors) {
             deleteTree(successor);
         }
-	root->predecessor = NULL;
+    	root->predecessor = NULL;
         root->successors.clear();
         root->untriedActions.clear();
         delete root;
@@ -106,8 +106,8 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
     for(MonteCarloTreeNode* successor : root->successors) {
         // Prevent divide by zero
         float numOfVisits = (successor->numOfVisits == 0) ? 0.0000001 : successor->numOfVisits;
-        float value = (successor->numOfWins + successor->numOfDraws);// / numOfVisits;
-        if(value >= max) {
+        float value = (successor->numOfWins + successor->numOfDraws) / numOfVisits;
+        if(value > max) {
             max = value;
             mostPromising = successor;
         }
@@ -140,7 +140,7 @@ MonteCarloTreeNode* AIPlayerMonteCarlo::selection(MonteCarloTreeNode* root, floa
         for(MonteCarloTreeNode* successor : node->successors) {
             float value = selectionFunction(successor);
             if(value > max) {
-		//std::cout << value << std::endl;
+		        //std::cout << value << std::endl;
                 max = value;
                 mostPromising = successor;
             }
@@ -156,20 +156,26 @@ MonteCarloTreeNode* AIPlayerMonteCarlo::expansion(MonteCarloTreeNode* leaf) {
     //std::cout << newNode << std::endl;
     // If this is a terminal node, do nothing.
     if(!leaf->untriedActions.empty()) { // Otherwise,
-	// Expand all untried actions
-	bool nextPlayer = (leaf->player == SELF) ? OPPONENT : SELF;
-	for(moveRCPair untriedAction : leaf->untriedActions) {
-	    char nextGameState[3][3];
-	    copyGameState(leaf->gameState, nextGameState);
-	    nextGameState[untriedAction.row][untriedAction.column] = (nextPlayer == SELF) ? this->mark : this->opponent->mark;
-	    newNode = createNode(nextPlayer, nextGameState, untriedAction, leaf);
-	    leaf->successors.push_back(newNode);
-	}
-	leaf->untriedActions.clear();
-	
+	    // Expand all untried actions
+	    bool nextPlayer = (leaf->player == SELF) ? OPPONENT : SELF;
+	    for(moveRCPair untriedAction : leaf->untriedActions) {
+    	    char nextGameState[3][3];
+	        copyGameState(leaf->gameState, nextGameState);
+	        nextGameState[untriedAction.row][untriedAction.column] = (nextPlayer == SELF) ? this->mark : this->opponent->mark;
+	        newNode = createNode(nextPlayer, nextGameState, untriedAction, leaf);
+	        leaf->successors.push_back(newNode);
+	    }
+	    leaf->untriedActions.clear();
     }
-    //std::cout << newNode << std::endl;
-    return newNode;
+
+    // Randomly pick one of the new nodes
+    srand(time(NULL));
+    std::list<MonteCarloTreeNode*>::iterator it = leaf->successors.begin();
+    int randomIndex = rand() % leaf->successors.size();
+    for(int i = 0; i < randomIndex; i++) it++;
+    MonteCarloTreeNode* picked = *it;
+
+    return picked;
 }
 
 int AIPlayerMonteCarlo::simulation(MonteCarloTreeNode* node, moveRCPair (*playoutFunction)(Player* player, char gameState[3][3])) {
