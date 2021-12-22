@@ -14,6 +14,22 @@ Player::Player(int code, char mark) {
     this->mark = mark;
 }
 
+Player::~Player() {
+    this->code = 0;
+    this->mark = 0;
+}
+
+bool gameStatesAreEqual(char g1[3][3], char g2[3][3]) {
+    bool result = true;
+
+    for(int i = 0; i < 9; i++) if(g1[int(i / 3)][i % 3] != g2[int(i / 3)][i % 3]) {
+        result = false;
+        break;
+    }
+
+    return result;
+}
+
 std::list<moveRCPair> getValidActions(char gameState[3][3]) {
     std::list<moveRCPair> actions;
 

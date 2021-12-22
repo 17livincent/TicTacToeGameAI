@@ -18,6 +18,11 @@ class Game; // forware declaration
 #define copyGameState(original, copyTo) for(int i = 0; i < 9; i++) copyTo[int(i / 3)][i % 3] = original[int(i / 3)][i % 3];
 
 /**
+ * Returns whether or not two grids are equal.
+ */
+bool gameStatesAreEqual(char g1[3][3], char g2[3][3]);
+
+/**
  *  Get a list of valid actions.
  */
 std::list<moveRCPair> getValidActions(char gameState[3][3]);
@@ -29,6 +34,9 @@ class Player {
 
         // Constructor
         Player(int code, char mark);
+
+        // Destructor
+        ~Player();
 
         /**
          *  Create and return a pair based on the row,column input.

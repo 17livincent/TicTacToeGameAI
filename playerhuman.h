@@ -17,7 +17,9 @@ class HumanPlayer: public Player {
             std::cout << "Introducing Player " << this->mark << ", who is a human player" << std::endl;
         }
 
-        virtual moveRCPair chooseMove(Game* game);
+        ~HumanPlayer() {}
+
+        moveRCPair chooseMove(Game* game);
 };
 
 #endif  // HUMANPLAYER

@@ -41,8 +41,14 @@ class AIPlayerMinimax: public Player {
             std::cout << "Introducing Player " << this->mark << ", who is a Minimax algorithm AI of search depth " << this->depthLimit << std::endl;
         };
 
+        ~AIPlayerMinimax() {
+            this->depthLimit = 0;
+            this->opponent = NULL;
+            this->treeSize = 0;
+        }
+
         // Use minimax and a game tree to choose the best move.
-        virtual moveRCPair chooseMove(Game* game);
+        moveRCPair chooseMove(Game* game);
 
         /**
          * Perform minimax search on the game tree of the given root and depth.
@@ -70,7 +76,6 @@ class AIPlayerMinimax: public Player {
         void deleteTree(MinimaxTreeNode* root);
 
         void postOrderTraversal(MinimaxTreeNode* root, int layer);
-
 };
 
 
