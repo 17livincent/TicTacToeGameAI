@@ -106,7 +106,8 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
     for(MonteCarloTreeNode* successor : root->successors) {
         // Prevent divide by zero
         float numOfVisits = (successor->numOfVisits == 0) ? 0.0000001 : successor->numOfVisits;
-        float value = (successor->numOfWins + successor->numOfDraws) / numOfVisits;
+        float value = (2 * successor->numOfWins + successor->numOfDraws) / numOfVisits;
+        //std::cout << successor->action.row << "," << successor->action.column << " " << value << std::endl;
         if(value > max) {
             max = value;
             mostPromising = successor;
