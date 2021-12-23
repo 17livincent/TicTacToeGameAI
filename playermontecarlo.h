@@ -56,21 +56,10 @@ bool isTerminalNode(MonteCarloTreeNode* node);
  */
 void deleteTree(MonteCarloTreeNode* root);
 
-/**
- * Delete all nodes of the search tree with the given @param root except 
- * the subtree starting at @param avoid.
- * To be used when the same tree is used throughout the game, 
- * but "alternate past" game states can be forgotten to save memory.
- */
-void graftTree(MonteCarloTreeNode* root, MonteCarloTreeNode* graft);
-
 class AIPlayerMonteCarlo: public Player {
     public:
         // The number of iterations to run MCTS.
         int iterations = 0;
-
-        // The root of the game tree.
-        MonteCarloTreeNode* root = NULL;
 
         // The opponent.
         Player* opponent;
@@ -83,16 +72,10 @@ class AIPlayerMonteCarlo: public Player {
             std::cout << "Introducing Player " << this->mark << ", who is a Monte Carlo ST AI of " << this->iterations << " iterations" << std::endl;
         }
 
-        ~AIPlayerMonteCarlo() {
-            this->iterations = 0;
-            this->opponent = NULL;
-            deleteTree(this->root);
-        }
-
         /**
          * Creates a game tree and uses Monte Carlo Tree Search (offline) to pick the best move.
          */
-        moveRCPair chooseMove(Game* game);
+        virtual moveRCPair chooseMove(Game* game);
 
         /**
          * Returns -1/0/1 if the given grid corresponds to a loss/draw/win.

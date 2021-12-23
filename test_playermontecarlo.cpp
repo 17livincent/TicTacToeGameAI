@@ -151,9 +151,6 @@ void test_chooseMove() {
 
     moveRCPair move = playerX.chooseMove(&game);
     std::cout << move.row << " " << move.column << std::endl;
-
-    // Check that the root is now the node of the chosen action
-    assert((playerX.root->action.row == move.row) && (playerX.root->action.column == move.column));
 }
 
 int main(int argc, char** argv) {
