@@ -19,6 +19,8 @@ struct MonteCarloTreeNode {
     char gameState[3][3] = BLANK_BOARD; // The game state.
     moveRCPair action;  // The action that lead to this state.
 
+    int depth = 0;  // The depth of this node relative to the root
+
     MonteCarloTreeNode* predecessor; // A pointer to the predecessor node.
     std::list<MonteCarloTreeNode*> successors;  // Pointers to the successor nodes.
 
@@ -28,13 +30,16 @@ struct MonteCarloTreeNode {
     int numOfWins = 0;
     int numOfLosses = 0;
     int numOfDraws = 0;
+    // The minimum number of moves for this or a descendant to simulate a win.
+    // Used to weight node that lead to quicker wins.
+    int minSimMovesToWin = INT32_MAX;
 };
 
 /**
- * Create a node with the given @param player, @param gameState, @param action, and @param predecessor.
+ * Create a node with the given @param player, @param gameState, @param action, @param predecessor, and @param depth.
  * The untriedActions member is created from the @param gameState.
  */
-MonteCarloTreeNode* createNode(bool player, char gameState[3][3], moveRCPair action, MonteCarloTreeNode* predecessor);
+MonteCarloTreeNode* createNode(bool player, char gameState[3][3], moveRCPair action, MonteCarloTreeNode* predecessor, int depth);
 
 /**
  * Performs light playout which returns a random valid move from the given player and game state.
