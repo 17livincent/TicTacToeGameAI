@@ -73,21 +73,58 @@ void deleteTree(MonteCarloTreeNode* root) {
     }
 }
 
+void graftTree(MonteCarloTreeNode* root, MonteCarloTreeNode* graft) {
+    if(root != graft && root != NULL) {
+        for(MonteCarloTreeNode* successor : root->successors) {
+            graftTree(successor, graft);
+        }
+    	root->predecessor = NULL;
+        root->successors.clear();
+        root->untriedActions.clear();
+        delete root;
+        root = NULL;
+    }
+    else if(root == graft) {
+        // Remove predecessor pointer
+        root->predecessor = NULL;
+        // Keep the rest of the details, including action
+    }
+}
+
 moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
-    moveRCPair move;
+    // Create root node from given game if this is the player's first move
+    if(this->root == NULL) {
+        // The player of this node is the one that just played
+        bool currentPlayer = ((game->currentPlayer == PLAYER_X_CODE && this->code == PLAYER_X_CODE) 
+                                || (game->currentPlayer == PLAYER_O_CODE && this->code == PLAYER_O_CODE)) ? OPPONENT : SELF;
+        moveRCPair placeholder = std::make_pair(-1, -1);
+        this->root = createNode(currentPlayer, game->board.grid, placeholder, NULL);
+    }
 
-    // Create root node from given game
-    // The player of this node is the one that just played
-    bool currentPlayer = ((game->currentPlayer == PLAYER_X_CODE && this->code == PLAYER_X_CODE) 
-                            || (game->currentPlayer == PLAYER_O_CODE && this->code == PLAYER_O_CODE)) ? OPPONENT : SELF;
-    moveRCPair placeholder = std::make_pair(-1, -1);
-    MonteCarloTreeNode* root = createNode(currentPlayer, game->board.grid, placeholder, NULL);
-
+    // Graft the tree in response to the opponent's move, if it happened
+    // From root, find the successor in depth 1 that matches the game
+    // If the tree is depth 0 (one node), then match is root
+    MonteCarloTreeNode* match;
+    if(root->successors.empty()) {
+        match = root;
+    }
+    else {
+        for(MonteCarloTreeNode* d1 : root->successors) {
+            if(gameStatesAreEqual(d1->gameState, game->board.grid)) {
+                match = d1;
+                break;
+            }
+        }
+    }
+    // Graft tree and relabel the root
+    graftTree(this->root, match);
+    this->root = match;
+    
     // Do MCTS for the given number of iterations
     for(int i = 0; i < this->iterations; i++) {
         //std::cout << i << std::endl;
         // Select a leaf
-        MonteCarloTreeNode* leaf = this->selection(root, &ucb);
+        MonteCarloTreeNode* leaf = this->selection(this->root, &ucb);
         if(!isTerminalNode(leaf)) {
             // Try expansion
             MonteCarloTreeNode* newNode = this->expansion(leaf);
@@ -103,7 +140,7 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
     // From the root, find the immediate child with the greatest promise and get its action.
     float max = -1;
     MonteCarloTreeNode* mostPromising;
-    for(MonteCarloTreeNode* successor : root->successors) {
+    for(MonteCarloTreeNode* successor : this->root->successors) {
         // Prevent divide by zero
         float numOfVisits = (successor->numOfVisits == 0) ? 0.0000001 : successor->numOfVisits;
         float value = (2 * successor->numOfWins + successor->numOfDraws) / numOfVisits;
@@ -113,11 +150,14 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
             mostPromising = successor;
         }
     }
+
+    moveRCPair move;
     move.row = mostPromising->action.row;
     move.column = mostPromising->action.column;
 
-    // Delete the tree
-    deleteTree(root);
+    // Graft the tree in response to own action
+    graftTree(this->root, mostPromising);
+    this->root = mostPromising;
 
     return move;
 }
