@@ -61,10 +61,21 @@ bool isTerminalNode(MonteCarloTreeNode* node);
  */
 void deleteTree(MonteCarloTreeNode* root);
 
+/**
+ * @brief Delete the tree from the given root except for the node at keep and its descendents.
+ * 
+ * @param root The root of the game tree
+ * @param keep The root of the subtree to avoid deleting
+ */
+void createScion(MonteCarloTreeNode* root, MonteCarloTreeNode* keep);
+
 class AIPlayerMonteCarlo: public Player {
     public:
         // The number of iterations to run MCTS.
         int iterations = 0;
+
+        // Game tree root
+        MonteCarloTreeNode* tree = NULL;
 
         // The opponent.
         Player* opponent;
@@ -75,6 +86,10 @@ class AIPlayerMonteCarlo: public Player {
 
             // Introduction
             std::cout << "Introducing Player " << this->mark << ", who is a Monte Carlo ST AI of " << this->iterations << " iterations" << std::endl;
+        }
+
+        ~AIPlayerMonteCarlo() {
+            deleteTree(tree);
         }
 
         /**
@@ -89,15 +104,16 @@ class AIPlayerMonteCarlo: public Player {
         int getNodeResult(MonteCarloTreeNode* node);
 
         /**
-         * From the @param root node, traverse down the tree to find a leaf node with no history of simulation (aka no successors).
+         * From the @param root node, traverse down the tree to find a leaf node with no successors.
          * Does not care if the found node is a terminal node (win/draw/loss).
          * The selection function could be ucb(), to rate each child node.
          */
         MonteCarloTreeNode* selection(MonteCarloTreeNode* root, float (*selectionFunction)(MonteCarloTreeNode*));
 
         /**
-         * Expands the given leaf node by one randomly-picked untried action.
-         * Returns the new child node.
+         * Fully expands the given leaf node if possible.
+         * Returns a random child node if at least one was created.
+         * If expansion wasn't possible (terminal node), return the given leaf node.
          */
         MonteCarloTreeNode* expansion(MonteCarloTreeNode* leaf);
 
@@ -105,6 +121,7 @@ class AIPlayerMonteCarlo: public Player {
          * Performs simulation/playout/rollout from the given node.
          * A playout function is passed for light/heavy playout.
          * Returns an int representing the result.
+         * Returns the result if the given node is a terminal node.
          */
         int simulation(MonteCarloTreeNode* node, moveRCPair (*playoutFunction)(Player* player, char gameState[3][3]));
 
