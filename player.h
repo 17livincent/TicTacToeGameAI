@@ -8,6 +8,8 @@
 #ifndef PLAYER
 #define PLAYER
 
+#include "defines.h"
+
 #include <iostream>
 #include <list>
 
@@ -50,7 +52,9 @@ class Player {
          */
         virtual moveRCPair chooseMove(Game* game) {
             // dummy body
+#if defined(DEBUG)
             std::cout << "Dummy function called" << std::endl;
+#endif  // defined(DEBUG)
             moveRCPair dummy;
             return dummy;
         };

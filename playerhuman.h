@@ -14,7 +14,9 @@ class HumanPlayer: public Player {
     public:
         HumanPlayer(int code, char mark):Player(code, mark) {
             // Introduction
+#if defined(VERBOSE)
             std::cout << "Introducing Player " << this->mark << ", who is a human player" << std::endl;
+#endif  // VERBOSE
         }
 
         ~HumanPlayer() {}

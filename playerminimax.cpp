@@ -4,18 +4,27 @@
  */
 
 #include "playerminimax.h"
+
+#if defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
 #include <iostream>
+#endif  // defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
 
 moveRCPair AIPlayerMinimax::chooseMove(Game* game) {
     this->treeSize = 0;
     // Create game tree
     moveRCPair initialAction;
     MinimaxTreeNode* gameTree = createGameTree(initialAction, game->board.grid, this->depthLimit * 2);
+#if defined(VERBOSE) || defined(DEBUG)
     std::cout << "\tMinimax AI created game tree of size " << treeSize << std::endl;
+#endif  // defined(VERBOSE) || defined(DEBUG)
     // Perform minimax search and get the best move
     std::pair<moveRCPair, int> minimax = minimaxSearch(gameTree, this->depthLimit * 2, -1000, 1000, true, initialAction);
     moveRCPair optAction = minimax.first;
+#if defined(VERBOSE) || defined(DEBUG)
     std::cout << "\tFound optimal move: " << optAction.row << ", " << optAction.column << " of value " << minimax.second << std::endl;
+#elif defined(MINIMAL_VERBOSE)
+    std::cout << this->mark << ":" << optAction.row << "," << optAction.column << std::endl;
+#endif
     // Delete the game tree
     deleteTree(gameTree);
 
@@ -30,7 +39,6 @@ std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node,
     if(maxPlayer) { // player is self
         moveRCPair localAction = action; // track optimal action
         int maxValue = -1000;  // negative infinity
-        //std::cout << node->successors.size() << std::endl;
         for(MinimaxTreeNode* successor : node->successors) {
             std::pair<moveRCPair, int> temp = minimaxSearch(successor, depth - 1, alpha, beta, false, action);
             if(temp.second > maxValue) {
@@ -47,7 +55,6 @@ std::pair<moveRCPair, int> AIPlayerMinimax::minimaxSearch(MinimaxTreeNode* node,
     else {  // player is opponent
         moveRCPair localAction = action; // track optimal action
         int minValue = 1000;  // infinity
-        //std::cout << node->successors.size() << std::endl;
         for(MinimaxTreeNode* successor : node->successors) {
             std::pair<moveRCPair, int> temp = minimaxSearch(successor, depth - 1, alpha, beta, true, action);
             if(temp.second < minValue) {

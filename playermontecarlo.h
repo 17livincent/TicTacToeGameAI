@@ -85,7 +85,9 @@ class AIPlayerMonteCarlo: public Player {
             this->opponent = opponent;
 
             // Introduction
+#if defined(VERBOSE) || defined(DEBUG)
             std::cout << "Introducing Player " << this->mark << ", who is a Monte Carlo ST AI of " << this->iterations << " iterations" << std::endl;
+#endif  // defined(VERBOSE) || defined(DEBUG)
         }
 
         ~AIPlayerMonteCarlo() {

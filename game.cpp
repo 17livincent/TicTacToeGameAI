@@ -3,7 +3,11 @@
  *  @author Vincent Li
  */
 
+#include "defines.h"
+
+#if defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
 #include <iostream>
+#endif  // defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
 
 #include "game.h"
 
@@ -120,6 +124,7 @@ int Game::validatePlayerInput(std::string input) {
 
     // notify
     if(status != 0) {
+#if defined(VERBOSE) || defined(DEBUG)
         std::cout << "INVALID input" << std::endl;
         
         if((status & 0b1) == 0b1) {
@@ -134,7 +139,10 @@ int Game::validatePlayerInput(std::string input) {
         if((status & 0b1000) == 0b1000) {
             std::cout << "\tThe grid spot is already marked" << std::endl;
         }
+#endif  // #if defined(VERBOSE) || defined(DEBUG)
     }
-
+#if defined(MINIMAL_VERBOSE)
+    std::cout << status << std::endl;
+#endif  // MINIMAL_VERBOSE
     return status;
 }

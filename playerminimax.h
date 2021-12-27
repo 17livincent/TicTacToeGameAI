@@ -38,7 +38,9 @@ class AIPlayerMinimax: public Player {
             this->opponent = opponent;
 
             // Introduction
+#if defined(VERBOSE)
             std::cout << "Introducing Player " << this->mark << ", who is a Minimax algorithm AI of search depth " << this->depthLimit << std::endl;
+#endif  // VERBOSE
         };
 
         ~AIPlayerMinimax() {

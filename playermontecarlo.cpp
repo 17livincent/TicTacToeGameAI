@@ -3,7 +3,12 @@
  *  @author Vincent Li
  */
 
+#include "defines.h"
+
+#if defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
 #include <iostream>
+#endif  // defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
+
 #include <cmath>
 #include <stdlib.h>
 #include <time.h>
@@ -146,7 +151,9 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
         float numOfVisits = (successor->numOfVisits == 0) ? 0.0000001 : successor->numOfVisits;
         // Calculate value for best action: (1/sqrt(min of simulated moves to win)) * (2*numOfWins + numOfDraws) / numOfVisits
         float value = (1 / std::sqrt(successor->minSimMovesToWin)) * (2 * successor->numOfWins + successor->numOfDraws) / numOfVisits;
-        //std::cout << "Action: " << successor->action.row << "," << successor->action.column << "\tValue: " << value << "\tMin exp moves to win: " << successor->minSimMovesToWin << "\tVisits: " << successor->numOfVisits << std::endl;    
+#if defined(DEBUG)
+        std::cout << "Action: " << successor->action.row << "," << successor->action.column << "\tValue: " << value << "\tMin exp moves to win: " << successor->minSimMovesToWin << "\tVisits: " << successor->numOfVisits << std::endl;    
+#endif  // defined(VERBOSE) || defined(DEBUG)
         if(value > max) {
             max = value;
             mostPromising = successor;
@@ -154,15 +161,17 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
     }
     move.row = mostPromising->action.row;
     move.column = mostPromising->action.column;
-
-    //std::cout << "Root visits: " << this->tree->numOfVisits << std::endl;
-
+#if defined(DEBUG)
+    std::cout << "Root visits: " << this->tree->numOfVisits << std::endl;
+#endif  // DEBUG
     // Move the root to the most promising node and delete the rest
     createScion(this->tree, mostPromising);
     this->tree = mostPromising;
-
+#if defined(VERBOSE) || defined(DEBUG)
     std::cout << "\tFound optimal move: " << move.row << ", " << move.column << " of value " << max << std::endl;
-
+#elif defined(MINIMAL_VERBOSE)
+    std::cout << this->mark << ":" << move.row << "," << move.column << std::endl;
+#endif
     return move;
 }
 
