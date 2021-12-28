@@ -44,7 +44,7 @@ MonteCarloTreeNode* createNode(bool player, char gameState[3][3], moveRCPair act
 /**
  * Performs light playout which returns a random valid move from the given player and game state.
  */
-moveRCPair lightPlayout(Player* player, char gameState[3][3]);
+moveRCPair lightPlayout(char player, char gameState[3][3]);
 
 /**
  * Return the upper confidence bound value of the given node.
@@ -77,12 +77,12 @@ class AIPlayerMonteCarlo: public Player {
         // Game tree root
         MonteCarloTreeNode* tree = NULL;
 
-        // The opponent.
-        Player* opponent;
+        // The opponent's mark
+        char opponentMark;
 
-        AIPlayerMonteCarlo(int code, int mark, int iterations, Player* opponent): Player(code, mark) {
+        AIPlayerMonteCarlo(int code, int mark, int iterations): Player(code, mark) {
             this->iterations = iterations;
-            this->opponent = opponent;
+            this->opponentMark = (this->mark == PLAYER_X_MARK) ? PLAYER_O_MARK : PLAYER_X_MARK;
 
             // Introduction
 #if defined(VERBOSE) || defined(DEBUG)
@@ -125,7 +125,7 @@ class AIPlayerMonteCarlo: public Player {
          * Returns an int representing the result.
          * Returns the result if the given node is a terminal node.
          */
-        int simulation(MonteCarloTreeNode* node, moveRCPair (*playoutFunction)(Player* player, char gameState[3][3]));
+        int simulation(MonteCarloTreeNode* node, moveRCPair (*playoutFunction)(char player, char gameState[3][3]));
 
         /**
          * Updates all preceding nodes to the root with the given result from simulation().

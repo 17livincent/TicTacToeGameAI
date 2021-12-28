@@ -28,7 +28,7 @@ MonteCarloTreeNode* createNode(bool player, char gameState[3][3], moveRCPair act
     return node;
 }
 
-moveRCPair lightPlayout(Player* player, char gameState[3][3]) {
+moveRCPair lightPlayout(char player, char gameState[3][3]) {
     std::list<moveRCPair> possibleActions = getValidActions(gameState);
     // Randomly pick one
     srand(time(NULL));
@@ -179,7 +179,7 @@ int AIPlayerMonteCarlo::getNodeResult(MonteCarloTreeNode* node) {
     int result = 0;
 
     result = playerWins(this->mark, node->gameState) ? 1 : result;
-    result = playerWins(this->opponent->mark, node->gameState) ? -1 : result;
+    result = playerWins(this->opponentMark, node->gameState) ? -1 : result;
 
     return result;
 }
@@ -213,7 +213,7 @@ MonteCarloTreeNode* AIPlayerMonteCarlo::expansion(MonteCarloTreeNode* leaf) {
 	    for(moveRCPair untriedAction : leaf->untriedActions) {
     	    char nextGameState[3][3];
 	        copyGameState(leaf->gameState, nextGameState);
-	        nextGameState[untriedAction.row][untriedAction.column] = (nextPlayer == SELF) ? this->mark : this->opponent->mark;
+	        nextGameState[untriedAction.row][untriedAction.column] = (nextPlayer == SELF) ? this->mark : this->opponentMark;
 	        newNode = createNode(nextPlayer, nextGameState, untriedAction, leaf, leaf->depth++);
 	        leaf->successors.push_back(newNode);
 	    }
@@ -230,7 +230,7 @@ MonteCarloTreeNode* AIPlayerMonteCarlo::expansion(MonteCarloTreeNode* leaf) {
     return newNode;
 }
 
-int AIPlayerMonteCarlo::simulation(MonteCarloTreeNode* node, moveRCPair (*playoutFunction)(Player* player, char gameState[3][3])) {
+int AIPlayerMonteCarlo::simulation(MonteCarloTreeNode* node, moveRCPair (*playoutFunction)(char player, char gameState[3][3])) {
     int result = 0;
     int moves = 1;
 
@@ -241,15 +241,15 @@ int AIPlayerMonteCarlo::simulation(MonteCarloTreeNode* node, moveRCPair (*playou
     else {
         MonteCarloTreeNode nodeCopy;
         copyGameState(node->gameState, nodeCopy.gameState);
-        Player* currentPlayer = (node->player == false) ? this : this->opponent;
+       char currentPlayer = (node->player == false) ? this->mark : this->opponentMark;
 
         while(!isTerminalNode(&nodeCopy)) {
             moves++;
             // Let the current player play a move
             moveRCPair move = lightPlayout(currentPlayer, nodeCopy.gameState);  // Pick a move
-            nodeCopy.gameState[move.row][move.column] = currentPlayer->mark;    // Mark the game state
+            nodeCopy.gameState[move.row][move.column] = currentPlayer;    // Mark the game state
             // Switch players
-            currentPlayer = (currentPlayer == this) ? this->opponent : this;
+            currentPlayer = (currentPlayer == this->mark) ? this->opponentMark : this->mark;
         }
 
         result = getNodeResult(&nodeCopy);

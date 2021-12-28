@@ -91,7 +91,7 @@ int AIPlayerMinimax::evalFunction(MinimaxTreeNode* node) {
         int oppCount = 0;
         for(int c = 0; c < 3; c++) {
             if(node->gameState[r][c] == this->mark) ownCount++;
-            else if(node->gameState[r][c] == this->opponent->mark) oppCount++;
+            else if(node->gameState[r][c] == this->opponentMark) oppCount++;
         }
         if(ownCount == 0) {
             if(oppCount == 1) opp1++;
@@ -111,7 +111,7 @@ int AIPlayerMinimax::evalFunction(MinimaxTreeNode* node) {
         int oppCount = 0;
         for(int r = 0; r < 3; r++) {
             if(node->gameState[r][c] == this->mark) ownCount++;
-            else if(node->gameState[r][c] == this->opponent->mark) oppCount++;
+            else if(node->gameState[r][c] == this->opponentMark) oppCount++;
         }
         if(ownCount == 0) {
             if(oppCount == 1) opp1++;
@@ -130,7 +130,7 @@ int AIPlayerMinimax::evalFunction(MinimaxTreeNode* node) {
     int oppCount = 0;
     for(int d = 0; d < 3; d++) {
         if(node->gameState[d][d] == this->mark) ownCount++;
-        else if(node->gameState[d][d] == this->opponent->mark) oppCount++;
+        else if(node->gameState[d][d] == this->opponentMark) oppCount++;
     }
     if(ownCount == 0) {
         if(oppCount == 1) opp1++;
@@ -148,7 +148,7 @@ int AIPlayerMinimax::evalFunction(MinimaxTreeNode* node) {
     oppCount = 0;
     for(int d = 0; d < 3; d++) {
         if(node->gameState[d][COLS - 1 - d] == this->mark) ownCount++;
-        else if(node->gameState[d][COLS - 1 - d] == this->opponent->mark) oppCount++;
+        else if(node->gameState[d][COLS - 1 - d] == this->opponentMark) oppCount++;
     }
     if(ownCount == 0) {
         if(oppCount == 1) opp1++;
@@ -177,7 +177,7 @@ MinimaxTreeNode* AIPlayerMinimax::createGameTree(moveRCPair action, char gameSta
 
     // If layer is even or 0, then the current player is this, next player is the opponent
     // If the layer is odd, then the current palyer is opponent, next player is this player
-    Player* currentPlayer = (layer % 2 == 0) ? this : this->opponent;
+    char currentPlayer = (layer % 2 == 0) ? this->mark : this->opponentMark;
     // Create nodes for each action of the current player
     // If validActions is empty, then no successors are created
     std::list<moveRCPair> validActions = getValidActions(gameState);
@@ -191,7 +191,7 @@ MinimaxTreeNode* AIPlayerMinimax::createGameTree(moveRCPair action, char gameSta
             char nextGameState[3][3];
             copyGameState(gameState, nextGameState);
             // Create new game state
-            nextGameState[move.row][move.column] = currentPlayer->mark;
+            nextGameState[move.row][move.column] = currentPlayer;
             MinimaxTreeNode* successor = createGameTree(move, nextGameState, layer - 1);
             node->successors.push_back(successor);
         }

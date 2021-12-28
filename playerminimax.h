@@ -27,15 +27,15 @@ class AIPlayerMinimax: public Player {
     public:
         // Max depth of search.  0 for the limit, which is 9.
         int depthLimit = 0;
-        // The opponent
-        Player* opponent;
+        // The opponent's mark
+        char opponentMark;
         // A handy variable to hold the number of nodes in the minimax tree
         int treeSize = 0;
 
         // Constructor
-        AIPlayerMinimax(int code, char mark, int depthLimit, Player* opponent): Player(code, mark) {
+        AIPlayerMinimax(int code, char mark, int depthLimit): Player(code, mark) {
             this->depthLimit = (depthLimit <= 0) ? 9 : depthLimit;
-            this->opponent = opponent;
+            this->opponentMark = (this->mark == PLAYER_X_MARK) ? PLAYER_O_MARK : PLAYER_X_MARK;
 
             // Introduction
 #if defined(VERBOSE)
@@ -45,7 +45,7 @@ class AIPlayerMinimax: public Player {
 
         ~AIPlayerMinimax() {
             this->depthLimit = 0;
-            this->opponent = NULL;
+            this->opponentMark = 0;
             this->treeSize = 0;
         }
 

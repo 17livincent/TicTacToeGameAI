@@ -26,7 +26,7 @@ void test_createNode() {
 }
 
 void test_selection() {
-    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1, NULL);
+    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1);
 
     char bb[3][3] = BLANK_BOARD;
     MonteCarloTreeNode* a = createNode(SELF, bb, std::make_pair(-1, -1), NULL, 0);
@@ -39,9 +39,8 @@ void test_selection() {
 }
 
 void test_expansion() {
-    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1, NULL);
-    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1, NULL);
-    playerX.opponent = &playerO;
+    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1);
+    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1);
     
     char bb[3][3] = BLANK_BOARD;
 
@@ -82,9 +81,8 @@ void test_isTerminalNode() {
 }
 
 void test_getNodeResult() {
-    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1, NULL);
-    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1, NULL);
-    playerX.opponent = &playerO;
+    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1);
+    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1);
 
     char win[3][3] = {PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK, PLAYER_X_MARK};
     MonteCarloTreeNode* a = createNode(SELF, win, std::make_pair(-1, -1), NULL, 0);
@@ -104,9 +102,8 @@ void test_getNodeResult() {
 }
 
 void test_simulation() {
-    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1, NULL);
-    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1, NULL);
-    playerX.opponent = &playerO;
+    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1);
+    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1);
 
     char willWin[3][3] = {PLAYER_X_MARK, CLEAR, PLAYER_X_MARK, CLEAR, CLEAR, CLEAR, PLAYER_X_MARK, CLEAR, PLAYER_X_MARK};
     MonteCarloTreeNode* a = createNode(OPPONENT, willWin, std::make_pair(-1, -1), NULL, 0);
@@ -130,7 +127,7 @@ void test_backpropagation() {
     MonteCarloTreeNode* a = createNode(OPPONENT, bb, std::make_pair(-1, -1), NULL, 0);
     MonteCarloTreeNode* b = createNode(SELF, bb, std::make_pair(-1, -1), a, 1);
 
-    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1, NULL);
+    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 1);
     b->minSimMovesToWin = 5;
     playerX.backpropagation(b, 1);
     assert(b->numOfVisits == 1);
@@ -144,10 +141,8 @@ void test_backpropagation() {
 }
 
 void test_chooseMove() {
-    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 100, NULL);
-    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1, NULL);
-    playerX.opponent = &playerO;
-    playerO.opponent = &playerX;
+    AIPlayerMonteCarlo playerX = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 100);
+    AIPlayerMonteCarlo playerO = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 1);
 
     Game game;
 
