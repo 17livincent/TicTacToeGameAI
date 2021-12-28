@@ -10,6 +10,9 @@
 #include <iostream>
 #endif  // defined(MINIMAL_VERBOSE) || defined(VERBOSE) || defined(DEBUG)
 
+#include <algorithm>
+#include <vector>
+
 #include "play.h"
 #include "game.h"
 
@@ -21,7 +24,6 @@ int Play::play(Player& playerX, Player& playerO) {
     int xWon = 0;
     int oWon = 0;
     int draw = 0;
-    std::string input;
     Player* player;
 #if defined(VERBOSE) || defined(DEBUG)
     std::cout << "Welcome to a game of Tic-Tac-Toe!" << std::endl;
@@ -100,11 +102,74 @@ int main(int argc, char** argv) {
     //playGame.play(ai1, ai2);
 
     // Run a game between two MCTS players.
-    AIPlayerMonteCarlo ai1 = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 100, NULL);
-    AIPlayerMonteCarlo ai2 = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 2, NULL);
-    ai1.opponent = &ai2;
-    ai2.opponent = &ai1;
-    playGame.play(ai1, ai2);
+    //AIPlayerMonteCarlo ai1 = AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, 100, NULL);
+    //AIPlayerMonteCarlo ai2 = AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, 2, NULL);
+    //ai1.opponent = &ai2;
+    //ai2.opponent = &ai1;
+    //playGame.play(ai1, ai2);
+
+    // Command line inputs
+    // Player O: -pO
+    // Player X: -pX
+    // Human player: -hp | --human
+    // Minimax player: --mm | --minimax
+    // Monte carlo player: --mc | --montecarlo
+    // Example: -pO mc 10 -pX mc 20
+
+    std::vector<std::string> inputs(argv, argv + argc);
+
+    std::vector<std::string>::iterator helpLoc = std::find(inputs.begin(), inputs.end(), "-h");
+    std::vector<std::string>::iterator pOLoc = std::find(inputs.begin(), inputs.end(), "-pO");
+    std::vector<std::string>::iterator pXLoc = std::find(inputs.begin(), inputs.end(), "-pX");
+    std::vector<std::string>::iterator pOTypeLoc = ++pXLoc;
+    std::vector<std::string>::iterator pXTypeLoc = ++pOLoc;
+
+    // Display help
+    if(argc == 1 || helpLoc != inputs.end()) {
+        std::cout << "Options:\n" 
+                    << "Player O: -pO\n" 
+                    << "Player X: -pX\n"
+                    << "Human player: hp | human\n"
+                    << "Minimax player: mm | minimax <tree depth>\n"
+                    << "Monte carlo player: mc | montecarlo <iterations>\n"
+                    << "Example: ./play -pO hp -pX mc 100" << std::endl;
+    }
+    else {
+        // Strict inputs
+        Player* playerX;
+        Player* playerO;
+
+        if(*pXTypeLoc == "hp" || *pXTypeLoc == "human") {
+            playerX = new HumanPlayer(PLAYER_X_CODE, PLAYER_X_MARK);
+        }
+        else if(*pXTypeLoc == "mm" || *pXTypeLoc == "minimax") {
+            playerX = new AIPlayerMinimax(PLAYER_X_CODE, PLAYER_X_MARK, std::stoi(*(++pXTypeLoc)));
+        }
+        else if(*pXTypeLoc == "mc" || *pXTypeLoc == "montecarlo") {
+            playerX = new AIPlayerMonteCarlo(PLAYER_X_CODE, PLAYER_X_MARK, std::stoi(*(++pXTypeLoc)));
+        }
+        else {
+            std::cout << "Error: Player X defined incorrectly." << std::endl;
+        }
+
+        if(*pOTypeLoc == "hp" || *pOTypeLoc == "human") {
+            playerO = new HumanPlayer(PLAYER_O_CODE, PLAYER_O_MARK);
+        }
+        else if(*pOTypeLoc == "mm" || *pOTypeLoc == "minimax") {
+            playerO = new AIPlayerMinimax(PLAYER_O_CODE, PLAYER_O_MARK, std::stoi(*(++pOTypeLoc)));
+        }
+        else if(*pOTypeLoc == "mc" || *pOTypeLoc == "montecarlo") {
+            playerO = new AIPlayerMonteCarlo(PLAYER_O_CODE, PLAYER_O_MARK, std::stoi(*(++pOTypeLoc)));
+        }
+        else {
+            std::cout << "Error: Player O defined incorrectly." << std::endl;
+        }
+
+        playGame.play(*playerX, *playerO);
+
+        delete playerX;
+        delete playerO;
+    }
 
     return 0;
 }
