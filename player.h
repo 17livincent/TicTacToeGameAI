@@ -38,7 +38,7 @@ class Player {
         Player(int code, char mark);
 
         // Destructor
-        ~Player();
+        virtual ~Player();
 
         /**
          *  Create and return a pair based on the row,column input.
