@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <signal.h>
 
 #include "play.h"
 #include "game.h"
@@ -81,7 +82,18 @@ int Play::play(Player& playerX, Player& playerO) {
     return result;
 }
 
+void toExit(int sig) {
+#if defined(VERBOSE) || defined(DEBUG)
+    std::cout << std::endl << "Program terminated" << std::endl;
+#endif  // defined(VERBOSE) || defined(DEBUG)
+    delete playerO;
+    delete playerX;
+    exit(sig);
+}
+
 int main(int argc, char** argv) {
+    signal(SIGINT, toExit);
+
     Play playGame;
 
     // Run a game between two human players.
@@ -121,8 +133,8 @@ int main(int argc, char** argv) {
     std::vector<std::string>::iterator helpLoc = std::find(inputs.begin(), inputs.end(), "-h");
     std::vector<std::string>::iterator pOLoc = std::find(inputs.begin(), inputs.end(), "-pO");
     std::vector<std::string>::iterator pXLoc = std::find(inputs.begin(), inputs.end(), "-pX");
-    std::vector<std::string>::iterator pOTypeLoc = ++pXLoc;
-    std::vector<std::string>::iterator pXTypeLoc = ++pOLoc;
+    std::vector<std::string>::iterator pOTypeLoc = ++pOLoc;
+    std::vector<std::string>::iterator pXTypeLoc = ++pXLoc;
 
     // Display help
     if(argc == 1 || helpLoc != inputs.end()) {
@@ -136,9 +148,6 @@ int main(int argc, char** argv) {
     }
     else {
         // Strict inputs
-        Player* playerX;
-        Player* playerO;
-
         if(*pXTypeLoc == "hp" || *pXTypeLoc == "human") {
             playerX = new HumanPlayer(PLAYER_X_CODE, PLAYER_X_MARK);
         }

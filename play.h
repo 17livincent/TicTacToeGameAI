@@ -14,6 +14,15 @@
 #include "playerminimax.h"
 #include "playermontecarlo.h"
 
+// Game players
+Player* playerX;
+Player* playerO;
+
+/**
+ * Free the global playerX and playerO on interrupt signal.
+ */
+void toExit(int sig);
+
 class Play {
     public:
         /**
