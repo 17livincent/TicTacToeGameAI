@@ -2,6 +2,18 @@
 
 This personal project is a Tic Tac Toe Game between 2 human or AI (WORK IN PROGRESS) players.
 
+## Guide
+First, run ```make``` in the working directory to create the ```play``` executable.  This executable has a command line interface to specify which player is of which type.  
+The general input form is like this: ```./play -pO <player O type and options> -pX <player X type and options>```
+
+Player types:
+- Human: ```hp``` or ```human```
+- Minimax: ```mm``` or ```minimax```
+    - Specify max tree depth
+- Monte Carlo: ```mc``` or ```montecarlo```
+    - Specify number of iterations
+Example: ```./play -pO hm -pX mc 100```
+
 ## File Descriptions
 - ```play.cpp``` and ```play.h```
     - Creates the executed ```play``` or ```play.exe``` file.
@@ -30,3 +42,6 @@ This personal project is a Tic Tac Toe Game between 2 human or AI (WORK IN PROGR
     - Implements the Tic Tac Toe board plus get/set functions.
 - ```util.h```
     - Defines constants, parameters, and values used by multiple files.
+- ```defines.h```
+    - Has definitions for conditional conclusion.
+    - Definitions for verbose modes.
