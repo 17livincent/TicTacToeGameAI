@@ -23,7 +23,7 @@ moveRCPair AIPlayerMinimax::chooseMove(Game* game) {
 #if defined(VERBOSE) || defined(DEBUG)
     std::cout << "\tFound optimal move: " << optAction.row << ", " << optAction.column << " of value " << minimax.second << std::endl;
 #elif defined(MINIMAL_VERBOSE)
-    std::cout << this->mark << ":" << optAction.row << "," << optAction.column << std::endl;
+    std::cout << game->turns << " " << this->mark << ":" << optAction.row << "," << optAction.column << std::endl;
 #endif
     // Delete the game tree
     deleteTree(gameTree);

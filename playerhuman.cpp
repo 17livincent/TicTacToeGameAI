@@ -20,7 +20,7 @@ moveRCPair HumanPlayer::chooseMove(Game* game) {
 #if defined(VERBOSE) || defined(DEBUG)
     std::cout << "\tPlayer " << this->mark << " marks " << move.row << "," << move.column << std::endl; 
 #elif defined(MINIMAL_VERBOSE)
-    std::cout << this->mark << ":" << move.row << "," << move.column << std::endl; 
+    std::cout << game->turns << " " << this->mark << ":" << move.row << "," << move.column << std::endl; 
 #endif
     return move;
 }

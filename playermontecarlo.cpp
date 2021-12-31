@@ -170,7 +170,7 @@ moveRCPair AIPlayerMonteCarlo::chooseMove(Game* game) {
 #if defined(VERBOSE) || defined(DEBUG)
     std::cout << "\tFound optimal move: " << move.row << ", " << move.column << " of value " << max << std::endl;
 #elif defined(MINIMAL_VERBOSE)
-    std::cout << this->mark << ":" << move.row << "," << move.column << std::endl;
+    std::cout << game->turns << " " << this->mark << ":" << move.row << "," << move.column << std::endl;
 #endif
     return move;
 }
