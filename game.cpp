@@ -141,8 +141,5 @@ int Game::validatePlayerInput(std::string input) {
         }
 #endif  // #if defined(VERBOSE) || defined(DEBUG)
     }
-#if defined(MINIMAL_VERBOSE)
-    std::cout << status << std::endl;
-#endif  // MINIMAL_VERBOSE
     return status;
 }
