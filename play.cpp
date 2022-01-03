@@ -57,7 +57,7 @@ int Play::play(Player& playerX, Player& playerO) {
 #endif  // defined(VERBOSE) || defined(DEBUG)
         result = PLAYER_X_WON;
 #if defined (MINIMAL_VERBOSE)
-        std::cout << result << std::endl;
+        std::cout << "Result:" << result << std::endl;
 #endif  // defined (MINIMAL_VERBOSE)
     }
     else if(oWon) {
@@ -66,7 +66,7 @@ int Play::play(Player& playerX, Player& playerO) {
 #endif  // defined(VERBOSE) || defined(DEBUG)
         result = PLAYER_O_WON;
 #if defined (MINIMAL_VERBOSE)
-        std::cout << result << std::endl;
+        std::cout << "Result:" << result << std::endl;
 #endif  // defined (MINIMAL_VERBOSE)
     }
     else if(draw) {
@@ -75,7 +75,7 @@ int Play::play(Player& playerX, Player& playerO) {
 #endif  // defined(VERBOSE) || defined(DEBUG)
         result = DRAW;
 #if defined (MINIMAL_VERBOSE)
-        std::cout << result << std::endl;
+        std::cout << "Result:" << result << std::endl;
 #endif  // defined (MINIMAL_VERBOSE)
     }
 
