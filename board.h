@@ -21,11 +21,6 @@ class GameBoard {
         std::string visBoard();
 
         /**
-         *  Return the address of the first element of the grid.
-         */
-        char* getGridPtr();
-
-        /**
          *  Place a marker on the board in the given row and col.
          *  Returns a bool for the status.  true: successful; false: failed/illegal.
          */

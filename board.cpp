@@ -21,10 +21,6 @@ std::string GameBoard::visBoard() {
     return display;
 }
 
-char* GameBoard::getGridPtr() {
-    return (char*)(&this->grid);
-}
-
 bool GameBoard::set(int row, int col, char mark) {
     bool status = true;
 
